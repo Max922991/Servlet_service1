@@ -1,21 +1,34 @@
-import org.apache.catalina.Context;
-import org.apache.catalina.LifecycleException;
-import org.apache.catalina.startup.Tomcat;
-
-import java.io.File;
-import java.net.MalformedURLException;
+import models.Car;
+import models.Company;
+import models.Employee;
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+import utils.HibernateSessionFactory;
 
 public class Main {
-    public static void main(String[] args) throws LifecycleException, MalformedURLException {
-        String webappDirLocation = "src/main/webapp/";
-        Tomcat tomcat = new Tomcat();
-        tomcat.setPort(8080);
+    public static void main(String[] args) {
 
-        Context context = tomcat.addWebapp("", new File(webappDirLocation).getAbsolutePath());
-        File configFile = new File(webappDirLocation + "WEB-INF/web.xml");
-        context.setConfigFile(configFile.toURI().toURL());
+        try (Session session = HibernateSessionFactory.getSessionFactory().openSession()) {
+            Company company = new Company();
+            company.setCompanyName("Company 1");
 
-        tomcat.start();
-        tomcat.getServer().await();
+            Employee employee = new Employee();
+            employee.setName("Will Smith");
+            employee.setCompanyName("Company 1");
+
+            Car car = new Car();
+            car.setBrand("BMW");
+            car.setModel("5 G20");
+            car.setCompanyName("Company 1");
+
+            session.beginTransaction();
+            session.save(company);
+            session.save(employee);
+            session.save(car);
+
+            session.getTransaction().commit();
+        } catch (HibernateException e) {
+            e.printStackTrace();
+        }
     }
 }

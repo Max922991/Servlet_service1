@@ -1,6 +1,5 @@
 package models;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,12 +14,9 @@ import javax.persistence.Table;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "car")
-public class Car extends Company{
+@Table(name = "employee")
+public class Employee extends Company{
 
-    @Column(name = "brand")
-    String brand;
-
-    @Column(name = "model")
-    String model;
+    @Column(name = "name")
+    String name;
 }
